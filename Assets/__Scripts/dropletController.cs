@@ -72,7 +72,7 @@ public class dropletController : MonoBehaviour {
 	void initialPlayer (int i, Vector3 position){
 		player[i] = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		player[i].tag = tagDroplet;
-		player [i].name = "player" + (++i);
+		player [i].name = "player" + i;
 	}
 	
 	//initialization for 2 droplets merge
@@ -88,10 +88,10 @@ public class dropletController : MonoBehaviour {
 		playerMerge2[index].tag = tagDroplet;
 		switch (index){
 		case 0:
-			playerMerge2[0].name = "player" + (++merged2Players[0]) + (++merged2Players[1]);
+			playerMerge2[0].name = "player" + merged2Players[0] + merged2Players[1];
 			break;
 		case 1:
-			playerMerge2[1].name = "player" + (++merged2Players[2]) + (++merged2Players[3]);
+			playerMerge2[1].name = "player" + merged2Players[2] + merged2Players[3];
 			break;
 		}
 		
@@ -102,14 +102,14 @@ public class dropletController : MonoBehaviour {
 		playerMerge3 = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		playerMerge3.transform.localScale += merge3Size;
 		playerMerge3.tag = tagDroplet;
-		playerMerge3.name = "player" + (++merged3Players[0]) + (++merged3Players[1])+ (++merged3Players[2]);
+		playerMerge3.name = "player" + merged3Players[0] + merged3Players[1] + merged3Players[2];
 	}
 	//initialization for 4 droplets merge
 	void initialMerge4(Vector3 position){
 		playerMerge4 = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		playerMerge4.transform.localScale += merge4Size;
 		playerMerge4.tag = tagDroplet;
-		playerMerge4.name = "player1234";
+		playerMerge4.name = "player0123";
 	}
 
 //	public void mergePlayer (int i){
@@ -334,6 +334,8 @@ public class dropletController : MonoBehaviour {
 					//third player goes right alone
 					isMerge3 = false;
 					isMerge2 = true;
+					merged2Players[0] = firstPlayer;
+					merged2Players[1] = secondPlayer;
 					initialMerge2(playerMerge3.transform.position - new Vector3(1f, 0, 0));
 					initialPlayer(thirdPlayer, playerMerge3.transform.position + new Vector3(1f, 0, 0));
 					Destroy(playerMerge3);
@@ -344,6 +346,8 @@ public class dropletController : MonoBehaviour {
 					//second player goes right alone
 					isMerge3 = false;
 					isMerge2 = true;
+					merged2Players[0] = firstPlayer;
+					merged2Players[1] = thirdPlayer;
 					initialMerge2(playerMerge3.transform.position - new Vector3(1f, 0, 0));
 					initialPlayer(secondPlayer, playerMerge3.transform.position + new Vector3(1f, 0, 0));
 					Destroy(playerMerge3);
@@ -353,6 +357,8 @@ public class dropletController : MonoBehaviour {
 					isMerge3 = false;
 					isMerge2 = true;
 					initialPlayer(firstPlayer, playerMerge3.transform.position - new Vector3(1f, 0, 0));
+					merged2Players[0] = secondPlayer;
+					merged2Players[1] = thirdPlayer;
 					initialMerge2(playerMerge3.transform.position + new Vector3(1f, 0, 0));
 					Destroy(playerMerge3);
 				}
@@ -369,6 +375,8 @@ public class dropletController : MonoBehaviour {
 					isMerge3 = false;
 					isMerge2 = true;
 					initialPlayer(thirdPlayer, playerMerge3.transform.position - new Vector3(1f, 0, 0));
+					merged2Players[0] = firstPlayer;
+					merged2Players[1] = secondPlayer;
 					initialMerge2(playerMerge3.transform.position + new Vector3(1f, 0, 0));
 					Destroy(playerMerge3);
 				}
@@ -378,6 +386,8 @@ public class dropletController : MonoBehaviour {
 					//first player goes right alone
 					isMerge3 = false;
 					isMerge2 = true;
+					merged2Players[0] = secondPlayer;
+					merged2Players[1] = thirdPlayer;
 					initialMerge2(playerMerge3.transform.position - new Vector3(1f, 0, 0));
 					initialPlayer(firstPlayer, playerMerge3.transform.position + new Vector3(1f, 0, 0));
 					Destroy(playerMerge3);
@@ -387,6 +397,8 @@ public class dropletController : MonoBehaviour {
 					isMerge3 = false;
 					isMerge2 = true;
 					initialPlayer(secondPlayer, playerMerge3.transform.position - new Vector3(1f, 0, 0));
+					merged2Players[0] = firstPlayer;
+					merged2Players[1] = thirdPlayer;
 					initialMerge2(playerMerge3.transform.position + new Vector3(1f, 0, 0));
 					Destroy(playerMerge3);
 				}
@@ -404,11 +416,74 @@ public class dropletController : MonoBehaviour {
 						playerMerge4.transform.position -= speedVector;
 					}
 					if (Input.GetKey(player4Right)){
-						//player4 goes alone
+						//player4 goes right alone
 						isMerge4 = false;
 						isMerge3 = true;
+						merged3Players = new int[3]{0, 1, 2};
 						initialMerge3(playerMerge4.transform.position - new Vector3(1f, 0, 0));
 						initialPlayer(3, playerMerge4.transform.position + new Vector3(1f, 0, 0));
+						Destroy(playerMerge4);
+					}
+				}
+				if (Input.GetKey(player3Right)){
+					if (Input.GetKey(player4Left)){
+						//player3 goes right alone
+						isMerge4 = false;
+						isMerge3 = true;
+						merged3Players = new int[3]{0, 1, 3};
+						initialMerge3(playerMerge4.transform.position - new Vector3(1f, 0, 0));
+						initialPlayer(2, playerMerge4.transform.position + new Vector3(1f, 0, 0));
+						Destroy(playerMerge4);
+					}
+					if (Input.GetKey(player4Right)){
+						//player12 goes left, player34 goes right
+						isMerge4 = false;
+						isMerge2 = true;
+						merged2Players = new int[4]{0,1,2,3};
+						initialMerge2(playerMerge4.transform.position - new Vector3(1f, 0, 0));
+						initialMerge2(playerMerge4.transform.position + new Vector3(1f, 0, 0));
+						Destroy(playerMerge4);
+					}
+				}
+			}
+			if (Input.GetKey(player2Right)){
+				if (Input.GetKey(player3Left)){
+					if (Input.GetKey(player4Left)){
+						//player2 goes right alone
+						isMerge4 = false;
+						isMerge3 = true;
+						merged3Players = new int[3]{0, 2, 3};
+						initialMerge3(playerMerge4.transform.position - new Vector3(1f, 0, 0));
+						initialPlayer(1, playerMerge4.transform.position + new Vector3(1f, 0, 0));
+						Destroy(playerMerge4);
+					}
+					if (Input.GetKey(player4Right)){
+						//player13 goes left, player24 goes right
+						isMerge4 = false;
+						isMerge2 = true;
+						merged2Players = new int[4]{0,2,1,3};
+						initialMerge2(playerMerge4.transform.position - new Vector3(1f, 0, 0));
+						initialMerge2(playerMerge4.transform.position + new Vector3(1f, 0, 0));
+						Destroy(playerMerge4);
+					}
+				}
+				if (Input.GetKey(player3Right)){
+					if (Input.GetKey(player4Left)){
+						//player14 goes left, player23 goes right
+						isMerge4 = false;
+						isMerge2 = true;
+						merged2Players = new int[4]{0,3,1,2};
+						initialMerge2(playerMerge4.transform.position - new Vector3(1f, 0, 0));
+						initialMerge2(playerMerge4.transform.position + new Vector3(1f, 0, 0));
+						Destroy(playerMerge4);
+					}
+					if (Input.GetKey(player4Right)){
+						//player1 goes left alone
+						isMerge4 = false;
+						isMerge3 = true;
+						merged3Players = new int[3]{1, 2, 3};
+						initialPlayer(0, playerMerge4.transform.position - new Vector3(1f, 0, 0));
+						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
 						Destroy(playerMerge4);
 					}
 				}
@@ -430,7 +505,52 @@ public class dropletController : MonoBehaviour {
 						Destroy(playerMerge4);
 					}
 				}
+//				if (Input.GetKey(player3Left)){
+//					if (Input.GetKey(player4Right)){
+//						//Go right together
+//						playerMerge4.transform.position += speedVector;
+//					}
+//					if (Input.GetKey(player4Left)){
+//						//player4 goes alone
+//						isMerge4 = false;
+//						isMerge3 = true;
+//						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
+//						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
+//						Destroy(playerMerge4);
+//					}
+//				}
 			}
+//			if (Input.GetKey(player2Right)){
+//				if (Input.GetKey(player3Right)){
+//					if (Input.GetKey(player4Right)){
+//						//Go right together
+//						playerMerge4.transform.position += speedVector;
+//					}
+//					if (Input.GetKey(player4Left)){
+//						//player4 goes alone
+//						isMerge4 = false;
+//						isMerge3 = true;
+//						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
+//						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
+//						Destroy(playerMerge4);
+//					}
+//				}
+//				if (Input.GetKey(player3Left)){
+//					if (Input.GetKey(player4Right)){
+//						//Go right together
+//						playerMerge4.transform.position += speedVector;
+//					}
+//					if (Input.GetKey(player4Left)){
+//						//player4 goes alone
+//						isMerge4 = false;
+//						isMerge3 = true;
+//						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
+//						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
+//						Destroy(playerMerge4);
+//					}
+//				}
+//				
+//			}
 		}
 	}
 	

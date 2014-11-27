@@ -33,6 +33,7 @@ public class dropletController : MonoBehaviour {
 	public GameObject[] playerMerge2;
 	public int[] merged2Players;
 	public GameObject playerMerge3;
+	public int[] merged3Players;
 	public GameObject playerMerge4;
 	
 	bool isCollide = false;
@@ -71,6 +72,7 @@ public class dropletController : MonoBehaviour {
 	void initialPlayer (int i, Vector3 position){
 		player[i] = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		player[i].tag = tagDroplet;
+		player [i].name = "player" + (++i);
 	}
 	
 	//initialization for 2 droplets merge
@@ -84,6 +86,15 @@ public class dropletController : MonoBehaviour {
 		playerMerge2[index] = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		playerMerge2[index].transform.localScale += merge2Size;
 		playerMerge2[index].tag = tagDroplet;
+		switch (index){
+		case 0:
+			playerMerge2[0].name = "player" + (++merged2Players[0]) + (++merged2Players[1]);
+			break;
+		case 1:
+			playerMerge2[1].name = "player" + (++merged2Players[2]) + (++merged2Players[3]);
+			break;
+		}
+		
 	}
 
 	//initialization for 3 droplets merge
@@ -91,12 +102,14 @@ public class dropletController : MonoBehaviour {
 		playerMerge3 = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		playerMerge3.transform.localScale += merge3Size;
 		playerMerge3.tag = tagDroplet;
+		playerMerge3.name = "player" + (++merged3Players[0]) + (++merged3Players[1])+ (++merged3Players[2]);
 	}
 	//initialization for 4 droplets merge
 	void initialMerge4(Vector3 position){
 		playerMerge4 = Instantiate(droplet, position, Quaternion.identity) as GameObject;
 		playerMerge4.transform.localScale += merge4Size;
 		playerMerge4.tag = tagDroplet;
+		playerMerge4.name = "player1234";
 	}
 
 //	public void mergePlayer (int i){
@@ -178,10 +191,6 @@ public class dropletController : MonoBehaviour {
 	
 	//control of 2 players
 	void manipulate2Players(int merge2Index, int firstPlayer, int secondPlayer) {
-		if (merge2Index == 0){
-			merged2Players[0] = firstPlayer;
-			merged2Players[1] = secondPlayer;
-		}
 		KeyCode firstPlayerLeft = player1Left;
 		KeyCode firstPlayerRight = player1Right;
 		KeyCode secondPlayerLeft = player2Left;
@@ -436,6 +445,7 @@ public class dropletController : MonoBehaviour {
 		playerMerge2 [0] = null;
 		playerMerge2 [1] = null;
 		merged2Players = new int[4];
+		merged3Players = new int[3];
 		inputController = gameObject.GetComponent("XInputTestCS") as XInputTestCS;
 		if (inputController != null) {
 			isControllerConnected = true;
@@ -449,41 +459,49 @@ public class dropletController : MonoBehaviour {
 			if(player[1] == null && player[2] != null && player[3] != null){
 				//player1, player2 merge
 				Debug.Log("1&2");
+				merged2Players[0] = 0;
+				merged2Players[1] = 1;
 				setIsMerge2(true);
 				manipulate2Players(0, 0, 1); 
 				manipulatePlayer3();
 				manipulatePlayer4();
 			} else if (player[1] != null && player[2] == null && player[3] != null){
 				//player1, player3 merge
+				merged2Players[0] = 0;
+				merged2Players[1] = 2;
 				setIsMerge2(true);
 				manipulate2Players(0, 0, 2); 
 				manipulatePlayer2();
 				manipulatePlayer4();
 			} else if (player[1] != null && player[2] != null && player[3] == null){
 				//player1, player4 merge
+				merged2Players[0] = 0;
+				merged2Players[1] = 3;
 				setIsMerge2(true);
 				manipulate2Players(0, 0, 3); 
 				manipulatePlayer2();
 				manipulatePlayer3();
 			} else if (player[1] == null && player[2] == null && player[3] != null){
 				//player1, player2, player3 merge
+				merged3Players = new int[3]{0, 1, 2};
 				setIsMerge3(true);
 				manipulate3Players(0, 1, 2);
 				manipulatePlayer4();
 			} else if (player[1] == null && player[2] != null && player[3] == null){
 				//player1, player2, player4 merge
+				merged3Players = new int[3]{0, 1, 3};
 				setIsMerge3(true);
 				manipulate3Players(0, 1, 3);
 				manipulatePlayer3();
 			} else if (player[1] != null && player[2] == null && player[3] == null){
 				//player1, player3, player4 merge
+				merged3Players = new int[3]{0, 2, 3};
 				setIsMerge3(true);
 				manipulate3Players(0, 2, 3);
 				manipulatePlayer2();
 			} else if (player[1] == null && player[2] == null && player[3] == null){
 				//2 players merge and 2 other players merge
 				if (playerMerge2[0] != null && playerMerge2[1] == null) {
-					setIsMerge2(true);
 					for (int i = 0; i <= 3; i++){
 						if (merged2Players[0] != i && merged2Players[1] != i){
 							merged2Players[2] = i;
@@ -496,6 +514,7 @@ public class dropletController : MonoBehaviour {
 							break;
 						}
 					}
+					setIsMerge2(true);
 				} else if(playerMerge2[0] != null && playerMerge2[1] != null){
 					manipulate2Players(0, merged2Players[0], merged2Players[1]);
 					manipulate2Players(1, merged2Players[2], merged2Players[3]);
@@ -508,24 +527,31 @@ public class dropletController : MonoBehaviour {
 		}else if (player[1] == null) {
 			if(player[2] == null && player[3] != null){
 				//player2, player3 merge
+				merged2Players[0] = 1;
+				merged2Players[1] = 2;
 				setIsMerge2(true);
 				manipulate2Players(0, 1, 2); 
 				manipulatePlayer1();
 				manipulatePlayer4();
 			} else if (player[2] != null && player[3] == null){
 				//player2, player4 merge
+				merged2Players[0] = 1;
+				merged2Players[1] = 3;
 				setIsMerge2(true);
 				manipulate2Players(0, 1, 3); 
 				manipulatePlayer1();
 				manipulatePlayer3();
 			} else if (player[2] == null && player[3] == null){
 				//player2, player3, player4 merge
+				merged3Players = new int[3]{1, 2, 3};
 				setIsMerge3(true);
 				manipulate3Players(1, 2, 3);
 				manipulatePlayer1();
 			}
 		} else if (player[2] == null){
 			//player3, player4 merge
+			merged2Players[0] = 2;
+			merged2Players[1] = 3;
 			setIsMerge2(true);
 			manipulate2Players(0, 2, 3); 
 			manipulatePlayer1();

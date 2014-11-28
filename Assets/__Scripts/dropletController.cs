@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using XInputDotNetPure; 
+using GamepadInput;
 
 public class dropletController : MonoBehaviour {
 	public GameObject droplet;
@@ -14,9 +14,9 @@ public class dropletController : MonoBehaviour {
 	public KeyCode player3Right = KeyCode.RightArrow;
 	public KeyCode player4Left = KeyCode.Keypad4;
 	public KeyCode player4Right = KeyCode.Keypad6;
-
-	XInputTestCS inputController;
+	
 	bool isControllerConnected = false;
+	public float temp;
 
 	public Vector3 player1Pos = new Vector3 (-7f, 0, 0);
 	public Vector3 player2Pos = new Vector3 (-3f, 0, 0);
@@ -118,31 +118,33 @@ public class dropletController : MonoBehaviour {
 	
 	//control of player1
 	void manipulatePlayer1 (){
-		if (isControllerConnected) {
-			if (inputController.state.ThumbSticks.Left.X < 0){
-				player[0].transform.position -= speedVector;
-			}
-			if (inputController.state.ThumbSticks.Left.X > 0){
-				player[0].transform.position += speedVector;
-			}
-		} else {
+//			temp = GamePad.GetState.LeftStickAxis.x;
+//			player[0].transform.position += new Vector3(temp*0.1f, 0, 0);
+//		if (isControllerConnected) {
+//			if (inputController.state.ThumbSticks.Left.X < 0){
+//				player[0].transform.position -= speedVector;
+//			}
+//			if (inputController.state.ThumbSticks.Left.X > 0){
+//				player[0].transform.position += speedVector;
+//			}
+//		} else {
 			if (Input.GetKey(player1Left)){
 				player[0].transform.position -= speedVector;
 			}
 			if (Input.GetKey(player1Right)){
 				player[0].transform.position += speedVector;
 			}
-		}
+//		}
 	}
 	//control of player2
 	void manipulatePlayer2 (){
 		if (isControllerConnected) {
-			if (inputController.state.ThumbSticks.Right.X < 0){
-				player[1].transform.position -= speedVector;
-			}
-			if (inputController.state.ThumbSticks.Right.X > 0){
-				player[1].transform.position += speedVector;
-			}
+//			if (inputController.state.ThumbSticks.Right.X < 0){
+//				player[1].transform.position -= speedVector;
+//			}
+//			if (inputController.state.ThumbSticks.Right.X > 0){
+//				player[1].transform.position += speedVector;
+//			}
 		} else {
 			if (Input.GetKey(player2Left)){
 				player[1].transform.position -= speedVector;
@@ -155,12 +157,12 @@ public class dropletController : MonoBehaviour {
 	//control of player3
 	void manipulatePlayer3 (){
 		if (isControllerConnected) {
-			if (inputController.state.ThumbSticks.Left.Y > 0){
-				player[2].transform.position -= speedVector;
-			}
-			if (inputController.state.ThumbSticks.Left.Y < 0){
-				player[2].transform.position += speedVector;
-			}
+//			if (inputController.state.ThumbSticks.Left.Y > 0){
+//				player[2].transform.position -= speedVector;
+//			}
+//			if (inputController.state.ThumbSticks.Left.Y < 0){
+//				player[2].transform.position += speedVector;
+//			}
 		} else {
 			if (Input.GetKey(player3Left)){
 				player[2].transform.position -= speedVector;
@@ -173,12 +175,12 @@ public class dropletController : MonoBehaviour {
 	//control of player4
 	void manipulatePlayer4 (){
 		if (isControllerConnected) {
-			if (inputController.state.ThumbSticks.Right.Y > 0){
-				player[3].transform.position -= speedVector;
-			}
-			if (inputController.state.ThumbSticks.Right.Y < 0){
-				player[3].transform.position += speedVector;
-			}
+//			if (inputController.state.ThumbSticks.Right.Y > 0){
+//				player[3].transform.position -= speedVector;
+//			}
+//			if (inputController.state.ThumbSticks.Right.Y < 0){
+//				player[3].transform.position += speedVector;
+//			}
 		} else {
 			if (Input.GetKey(player4Left)){
 				player[3].transform.position -= speedVector;
@@ -242,6 +244,7 @@ public class dropletController : MonoBehaviour {
 				isMerge2 = false;
 				initialPlayer(firstPlayer, playerMerge2[merge2Index].transform.position - new Vector3(1f, 0, 0));
 				initialPlayer(secondPlayer, playerMerge2[merge2Index].transform.position + new Vector3(1f, 0, 0));
+				merged2Players = new int[4];
 				Destroy(playerMerge2[merge2Index]);
 			}
 		}
@@ -253,6 +256,7 @@ public class dropletController : MonoBehaviour {
 				isMerge2 = false;
 				initialPlayer(firstPlayer, playerMerge2[merge2Index].transform.position + new Vector3(1f, 0, 0));
 				initialPlayer(secondPlayer, playerMerge2[merge2Index].transform.position - new Vector3(1f, 0, 0));
+				merged2Players = new int[4];
 				Destroy(playerMerge2[merge2Index]);
 			}
 		}
@@ -566,10 +570,10 @@ public class dropletController : MonoBehaviour {
 		playerMerge2 [1] = null;
 		merged2Players = new int[4];
 		merged3Players = new int[3];
-		inputController = gameObject.GetComponent("XInputTestCS") as XInputTestCS;
-		if (inputController != null) {
-			isControllerConnected = true;
-		}
+//		inputController = gameObject.GetComponent("XInputTestCS") as XInputTestCS;
+//		if (inputController != null) {
+//			isControllerConnected = true;
+//		}
 	}
 	
 	// Update is called once per frame

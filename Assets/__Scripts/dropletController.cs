@@ -16,355 +16,224 @@ public class dropletController : MonoBehaviour {
 	public KeyCode player4Right = KeyCode.Keypad6;
 	
 	bool isControllerConnected = false;
-	public float temp;
+	public float player1Move;
+	public float player2Move;
+	public float player3Move;
+	public float player4Move;
+	public float playerMoveSpeed = 0.01f;
 
 	public Vector3 player1Pos = new Vector3 (-7f, 0, 0);
 	public Vector3 player2Pos = new Vector3 (-3f, 0, 0);
 	public Vector3 player3Pos = new Vector3 (4f, 0, 0);
 	public Vector3 player4Pos = new Vector3 (7f, 0, 0);
 
-	public Vector3 merge2Size = new Vector3 (.3f, .3f, 0);
-	public Vector3 merge3Size = new Vector3 (.6f, .6f, 0);
-	public Vector3 merge4Size = new Vector3 (.9f, .9f, 0);
+	public Vector3[] playerSize;
+	public Vector3 initialPlayerSize = new Vector3 (.8f, .8f, 0);
+
+	public float merge2Size = .6f;
+	public float merge3Size = .55f;
+	public float merge4Size = .55f;
 
 	public Vector3 speedVector = new Vector3 (.03f, 0, 0);
-	
-	public GameObject[] player;
-	public GameObject[] playerMerge2;
-	public int[] merged2Players;
-	public GameObject playerMerge3;
-	public int[] merged3Players;
-	public GameObject playerMerge4;
-	
-	bool isCollide = false;
-	Vector3 collidePos;
-	
-	bool isMerge2 = false;
-	bool isMerge3 = false;
-	bool isMerge4 = false;
-	
-	//set variables for colliding
-	public void setCollide(bool isColliding, Vector3 position) {
-		isCollide = isColliding;
-		collidePos = position;
-	}
-	
-	//change the variable when 2 droplets merge
-	void setIsMerge2(bool temp) {
-		isMerge2 = temp;
-		isMerge3 = !temp;
-		isMerge4 = !temp;
-	}
-	//change the variable when 3 droplets merge
-	void setIsMerge3(bool temp) {
-		isMerge3 = temp;
-		isMerge2 = !temp;
-		isMerge4 = !temp;
-	}
-	//change the variable when 4 droplets merge
-	void setIsMerge4(bool temp) {
-		isMerge4 = temp;
-		isMerge2 = !temp;
-		isMerge3 = !temp;
+	public Vector3 disDifference = new Vector3(1f, 0, 0);
+
+	//initialization
+	public void initiateDroplet (string name, Vector3 position, Vector3 scale){
+		GameObject player = Instantiate(droplet, position, Quaternion.identity) as GameObject;
+		player.tag = tagDroplet;
+		player.name = name;
+		player.transform.localScale = scale;
 	}
 
-	//initialization for player
-	void initialPlayer (int i, Vector3 position){
-		player[i] = Instantiate(droplet, position, Quaternion.identity) as GameObject;
-		player[i].tag = tagDroplet;
-		player [i].name = "player" + i;
-	}
-	
-	//initialization for 2 droplets merge
-	void initialMerge2(Vector3 position){
-		int index;
-		if (playerMerge2[0] == null) {
-			index = 0;
-		} else {
-			index = 1;
-		}
-		playerMerge2[index] = Instantiate(droplet, position, Quaternion.identity) as GameObject;
-		playerMerge2[index].transform.localScale += merge2Size;
-		playerMerge2[index].tag = tagDroplet;
-		switch (index){
-		case 0:
-			playerMerge2[0].name = "player" + merged2Players[0] + merged2Players[1];
-			break;
+	KeyCode leftKey(int dropletIndex) {
+		switch (dropletIndex) {
 		case 1:
-			playerMerge2[1].name = "player" + merged2Players[2] + merged2Players[3];
+			return player1Left;
+			break;
+		case 2:
+			return player2Left;
+			break;
+		case 3:
+			return player3Left;
+			break;
+		case 4:
+			return player4Left;
 			break;
 		}
-		
+		return KeyCode.Escape;
 	}
 
-	//initialization for 3 droplets merge
-	void initialMerge3(Vector3 position){
-		playerMerge3 = Instantiate(droplet, position, Quaternion.identity) as GameObject;
-		playerMerge3.transform.localScale += merge3Size;
-		playerMerge3.tag = tagDroplet;
-		playerMerge3.name = "player" + merged3Players[0] + merged3Players[1] + merged3Players[2];
-	}
-	//initialization for 4 droplets merge
-	void initialMerge4(Vector3 position){
-		playerMerge4 = Instantiate(droplet, position, Quaternion.identity) as GameObject;
-		playerMerge4.transform.localScale += merge4Size;
-		playerMerge4.tag = tagDroplet;
-		playerMerge4.name = "player0123";
+	KeyCode rightKey(int dropletIndex) {
+		switch (dropletIndex) {
+		case 1:
+			return player1Right;
+			break;
+		case 2:
+			return player2Right;
+			break;
+		case 3:
+			return player3Right;
+			break;
+		case 4:
+			return player4Right;
+			break;
+		}
+		return KeyCode.Escape;
 	}
 
-//	public void mergePlayer (int i){
-//		player [i] = null;
-//	}
-	
-	//control of player1
-	void manipulatePlayer1 (){
-//			temp = GamePad.GetState.LeftStickAxis.x;
-//			player[0].transform.position += new Vector3(temp*0.1f, 0, 0);
-//		if (isControllerConnected) {
-//			if (inputController.state.ThumbSticks.Left.X < 0){
-//				player[0].transform.position -= speedVector;
-//			}
-//			if (inputController.state.ThumbSticks.Left.X > 0){
-//				player[0].transform.position += speedVector;
-//			}
-//		} else {
-			if (Input.GetKey(player1Left)){
-				player[0].transform.position -= speedVector;
-			}
-			if (Input.GetKey(player1Right)){
-				player[0].transform.position += speedVector;
-			}
-//		}
-	}
-	//control of player2
-	void manipulatePlayer2 (){
-		if (isControllerConnected) {
-//			if (inputController.state.ThumbSticks.Right.X < 0){
-//				player[1].transform.position -= speedVector;
-//			}
-//			if (inputController.state.ThumbSticks.Right.X > 0){
-//				player[1].transform.position += speedVector;
-//			}
-		} else {
-			if (Input.GetKey(player2Left)){
-				player[1].transform.position -= speedVector;
-			}
-			if (Input.GetKey(player2Right)){
-				player[1].transform.position += speedVector;
-			}
+	float playerMove(int dropletIndex){
+		switch (dropletIndex) {
+		case 1:
+			return player1Move;
+			break;
+		case 2:
+			return player2Move;
+			break;
+		case 3:
+			return player3Move;
+			break;
+		case 4:
+			return player4Move;
+			break;
 		}
+		return -1;
 	}
-	//control of player3
-	void manipulatePlayer3 (){
-		if (isControllerConnected) {
-//			if (inputController.state.ThumbSticks.Left.Y > 0){
-//				player[2].transform.position -= speedVector;
-//			}
-//			if (inputController.state.ThumbSticks.Left.Y < 0){
-//				player[2].transform.position += speedVector;
-//			}
-		} else {
-			if (Input.GetKey(player3Left)){
-				player[2].transform.position -= speedVector;
-			}
-			if (Input.GetKey(player3Right)){
-				player[2].transform.position += speedVector;
-			}
+
+	//control of 1 player
+	void manipulate1Player (GameObject droplet, int player){
+		//control by keyboard
+		if (Input.GetKey(leftKey(player))){
+			droplet.transform.position -= speedVector;
 		}
-	}
-	//control of player4
-	void manipulatePlayer4 (){
+		if (Input.GetKey(rightKey(player))){
+			droplet.transform.position += speedVector;
+		}
+		//control by controller
 		if (isControllerConnected) {
-//			if (inputController.state.ThumbSticks.Right.Y > 0){
-//				player[3].transform.position -= speedVector;
-//			}
-//			if (inputController.state.ThumbSticks.Right.Y < 0){
-//				player[3].transform.position += speedVector;
-//			}
-		} else {
-			if (Input.GetKey(player4Left)){
-				player[3].transform.position -= speedVector;
-			}
-			if (Input.GetKey(player4Right)){
-				player[3].transform.position += speedVector;
-			}
+			droplet.transform.position += new Vector3(playerMove(player) * playerMoveSpeed, 0, 0);
 		}
 	}
 	
 	//control of 2 players
-	void manipulate2Players(int merge2Index, int firstPlayer, int secondPlayer) {
-		KeyCode firstPlayerLeft = player1Left;
-		KeyCode firstPlayerRight = player1Right;
-		KeyCode secondPlayerLeft = player2Left;
-		KeyCode secondPlayerRight = player2Right;
-
-		switch (firstPlayer) {
-		case 0:
-			firstPlayerLeft = player1Left;
-			firstPlayerRight = player1Right;
-			break;
-		case 1:
-			firstPlayerLeft = player2Left;
-			firstPlayerRight = player2Right;
-			break;
-		case 2:
-			firstPlayerLeft = player3Left;
-			firstPlayerRight = player3Right;
-			break;
-		case 3:
-			firstPlayerLeft = player4Left;
-			firstPlayerRight = player4Right;
-			break;
-		}
-
-		switch (secondPlayer) {
-		case 0:
-			secondPlayerLeft = player1Left;
-			secondPlayerRight = player1Right;
-			break;
-		case 1:
-			secondPlayerLeft = player2Left;
-			secondPlayerRight = player2Right;
-			break;
-		case 2:
-			secondPlayerLeft = player3Left;
-			secondPlayerRight = player3Right;
-			break;
-		case 3:
-			secondPlayerLeft = player4Left;
-			secondPlayerRight = player4Right;
-			break;
-		}
+	void manipulate2Players(GameObject droplet, int firstPlayer, int secondPlayer) {
+		//control by keyboard
+		KeyCode firstPlayerLeft = leftKey(firstPlayer);
+		KeyCode firstPlayerRight = rightKey(firstPlayer);
+		KeyCode secondPlayerLeft = leftKey(secondPlayer);
+		KeyCode secondPlayerRight = rightKey(secondPlayer);
 
 		if (Input.GetKey(firstPlayerLeft)){
 			if (Input.GetKey(secondPlayerLeft)){
-				playerMerge2[merge2Index].transform.position -= speedVector;
+				//2 players go left together
+				droplet.transform.position -= speedVector;
 			}
 			if (Input.GetKey(secondPlayerRight)){
-				isMerge2 = false;
-				initialPlayer(firstPlayer, playerMerge2[merge2Index].transform.position - new Vector3(1f, 0, 0));
-				initialPlayer(secondPlayer, playerMerge2[merge2Index].transform.position + new Vector3(1f, 0, 0));
-				merged2Players = new int[4];
-				Destroy(playerMerge2[merge2Index]);
+				//first player goes left, second player goes right
+				initiateDroplet("player" + firstPlayer,
+				                droplet.transform.position - disDifference,
+				                playerSize[firstPlayer - 1]);
+				initiateDroplet("player" + secondPlayer,
+				                droplet.transform.position + disDifference,
+				                playerSize[secondPlayer - 1]);
+				Destroy(droplet);
 			}
 		}
 		if (Input.GetKey(firstPlayerRight)){
 			if (Input.GetKey(secondPlayerRight)){
-				playerMerge2[merge2Index].transform.position += speedVector;
+				//2 players go right together
+				droplet.transform.position += speedVector;
 			}
 			if (Input.GetKey(secondPlayerLeft)){
-				isMerge2 = false;
-				initialPlayer(firstPlayer, playerMerge2[merge2Index].transform.position + new Vector3(1f, 0, 0));
-				initialPlayer(secondPlayer, playerMerge2[merge2Index].transform.position - new Vector3(1f, 0, 0));
-				merged2Players = new int[4];
-				Destroy(playerMerge2[merge2Index]);
+				//first player goes right, second player goes left
+				initiateDroplet("player" + firstPlayer,
+				                droplet.transform.position + disDifference,
+				                playerSize[firstPlayer - 1]);
+				initiateDroplet("player" + secondPlayer,
+				                droplet.transform.position - disDifference,
+				                playerSize[secondPlayer - 1]);
+				Destroy(droplet);
+			}
+		}
+		
+		//control by controller
+		if (isControllerConnected) {
+			float firstPlayerMove = playerMove(firstPlayer);
+			float secondPlayerMove = playerMove(secondPlayer);
+
+			if ((firstPlayerMove <= 0 && secondPlayerMove <= 0)||(firstPlayerMove >= 0 && secondPlayerMove >= 0)){
+				//move together
+				float aveMove = (firstPlayerMove + secondPlayerMove) / 2;
+				droplet.transform.position += new Vector3(aveMove * playerMoveSpeed, 0, 0);
+			}
+			else {
+				//split up
+				if (firstPlayerMove < 0) {
+					initiateDroplet("player" + firstPlayer,
+					                droplet.transform.position - disDifference,
+					                playerSize[firstPlayer - 1]);
+					initiateDroplet("player" + secondPlayer,
+					                droplet.transform.position + disDifference,
+					                playerSize[secondPlayer - 1]);
+				} else {
+					initiateDroplet("player" + firstPlayer,
+					                droplet.transform.position + disDifference,
+					                playerSize[firstPlayer - 1]);
+					initiateDroplet("player" + secondPlayer,
+					                droplet.transform.position - disDifference,
+					                playerSize[secondPlayer - 1]);
+				}
+				Destroy(droplet);
 			}
 		}
 	}
 
 	//control of 3 players
-	void manipulate3Players(int firstPlayer, int secondPlayer, int thirdPlayer) {
-		KeyCode firstPlayerLeft = player1Left;
-		KeyCode firstPlayerRight = player1Right;
-		KeyCode secondPlayerLeft = player2Left;
-		KeyCode secondPlayerRight = player2Right;
-		KeyCode thirdPlayerLeft = player3Left;
-		KeyCode thirdPlayerRight = player3Right;
-		
-		switch (firstPlayer) {
-		case 0:
-			firstPlayerLeft = player1Left;
-			firstPlayerRight = player1Right;
-			break;
-		case 1:
-			firstPlayerLeft = player2Left;
-			firstPlayerRight = player2Right;
-			break;
-		case 2:
-			firstPlayerLeft = player3Left;
-			firstPlayerRight = player3Right;
-			break;
-		case 3:
-			firstPlayerLeft = player4Left;
-			firstPlayerRight = player4Right;
-			break;
-		}
-		
-		switch (secondPlayer) {
-		case 0:
-			secondPlayerLeft = player1Left;
-			secondPlayerRight = player1Right;
-			break;
-		case 1:
-			secondPlayerLeft = player2Left;
-			secondPlayerRight = player2Right;
-			break;
-		case 2:
-			secondPlayerLeft = player3Left;
-			secondPlayerRight = player3Right;
-			break;
-		case 3:
-			secondPlayerLeft = player4Left;
-			secondPlayerRight = player4Right;
-			break;
-		}
+	void manipulate3Players(GameObject droplet, int firstPlayer, int secondPlayer, int thirdPlayer) {
+		//control by keyboard
+		KeyCode firstPlayerLeft = leftKey(firstPlayer);
+		KeyCode firstPlayerRight = rightKey(firstPlayer);
+		KeyCode secondPlayerLeft = leftKey(secondPlayer);
+		KeyCode secondPlayerRight = rightKey(secondPlayer);
+		KeyCode thirdPlayerLeft = leftKey(thirdPlayer);
+		KeyCode thirdPlayerRight = rightKey(thirdPlayer);
 
-		switch (thirdPlayer) {
-		case 0:
-			thirdPlayerLeft = player1Left;
-			thirdPlayerRight = player1Right;
-			break;
-		case 1:
-			thirdPlayerLeft = player2Left;
-			thirdPlayerRight = player2Right;
-			break;
-		case 2:
-			thirdPlayerLeft = player3Left;
-			thirdPlayerRight = player3Right;
-			break;
-		case 3:
-			thirdPlayerLeft = player4Left;
-			thirdPlayerRight = player4Right;
-			break;
-		}
-		
 		if (Input.GetKey(firstPlayerLeft)){
 			if (Input.GetKey(secondPlayerLeft)){
 				if (Input.GetKey(thirdPlayerLeft)){
 					//Go left together
-					playerMerge3.transform.position -= speedVector;
+					droplet.transform.position -= speedVector;
 				}
 				if (Input.GetKey(thirdPlayerRight)){
 					//third player goes right alone
-					isMerge3 = false;
-					isMerge2 = true;
-					merged2Players[0] = firstPlayer;
-					merged2Players[1] = secondPlayer;
-					initialMerge2(playerMerge3.transform.position - new Vector3(1f, 0, 0));
-					initialPlayer(thirdPlayer, playerMerge3.transform.position + new Vector3(1f, 0, 0));
-					Destroy(playerMerge3);
+					initiateDroplet("player" + firstPlayer + secondPlayer,
+					                droplet.transform.position - disDifference,
+					                (playerSize[firstPlayer - 1] + playerSize[secondPlayer - 1]) * merge2Size);
+					initiateDroplet("player" + thirdPlayer,
+					                droplet.transform.position + disDifference,
+					                playerSize[thirdPlayer - 1]);
+					Destroy(droplet);
 				}
 			}
 			if (Input.GetKey(secondPlayerRight)){
 				if (Input.GetKey(thirdPlayerLeft)){
 					//second player goes right alone
-					isMerge3 = false;
-					isMerge2 = true;
-					merged2Players[0] = firstPlayer;
-					merged2Players[1] = thirdPlayer;
-					initialMerge2(playerMerge3.transform.position - new Vector3(1f, 0, 0));
-					initialPlayer(secondPlayer, playerMerge3.transform.position + new Vector3(1f, 0, 0));
-					Destroy(playerMerge3);
+					initiateDroplet("player" + firstPlayer + thirdPlayer,
+					                droplet.transform.position - disDifference,
+					                (playerSize[firstPlayer - 1] + playerSize[thirdPlayer - 1]) * merge2Size);
+					initiateDroplet("player" + secondPlayer,
+					                droplet.transform.position + disDifference,
+					                playerSize[secondPlayer - 1]);
+					Destroy(droplet);
 				}
 				if (Input.GetKey(thirdPlayerRight)){
 					//first player goes left alone
-					isMerge3 = false;
-					isMerge2 = true;
-					initialPlayer(firstPlayer, playerMerge3.transform.position - new Vector3(1f, 0, 0));
-					merged2Players[0] = secondPlayer;
-					merged2Players[1] = thirdPlayer;
-					initialMerge2(playerMerge3.transform.position + new Vector3(1f, 0, 0));
-					Destroy(playerMerge3);
+					initiateDroplet("player" + firstPlayer,
+					                droplet.transform.position - disDifference,
+					                playerSize[firstPlayer - 1]);
+					initiateDroplet("player" + secondPlayer + thirdPlayer,
+					                droplet.transform.position + disDifference,
+					                (playerSize[secondPlayer - 1] + playerSize[thirdPlayer - 1]) * merge2Size);
+					Destroy(droplet);
 				}
 			}
 		}
@@ -372,81 +241,111 @@ public class dropletController : MonoBehaviour {
 			if (Input.GetKey(secondPlayerRight)){
 				if (Input.GetKey(thirdPlayerRight)){
 					//go right together
-					playerMerge3.transform.position += speedVector;
+					droplet.transform.position += speedVector;
 				}
 				if (Input.GetKey(thirdPlayerLeft)){
 					//third player goes left alone
-					isMerge3 = false;
-					isMerge2 = true;
-					initialPlayer(thirdPlayer, playerMerge3.transform.position - new Vector3(1f, 0, 0));
-					merged2Players[0] = firstPlayer;
-					merged2Players[1] = secondPlayer;
-					initialMerge2(playerMerge3.transform.position + new Vector3(1f, 0, 0));
-					Destroy(playerMerge3);
+					initiateDroplet("player" + thirdPlayer,
+					                droplet.transform.position - disDifference,
+					                playerSize[thirdPlayer - 1]);
+					initiateDroplet("player" + firstPlayer + secondPlayer,
+					                droplet.transform.position + disDifference,
+					                (playerSize[firstPlayer - 1] + playerSize[secondPlayer - 1]) * merge2Size);
+					Destroy(droplet);
 				}
 			}
 			if (Input.GetKey(secondPlayerLeft)){
 				if (Input.GetKey(thirdPlayerLeft)){
 					//first player goes right alone
-					isMerge3 = false;
-					isMerge2 = true;
-					merged2Players[0] = secondPlayer;
-					merged2Players[1] = thirdPlayer;
-					initialMerge2(playerMerge3.transform.position - new Vector3(1f, 0, 0));
-					initialPlayer(firstPlayer, playerMerge3.transform.position + new Vector3(1f, 0, 0));
-					Destroy(playerMerge3);
+					initiateDroplet("player" + secondPlayer + thirdPlayer,
+					                droplet.transform.position - disDifference,
+					                (playerSize[secondPlayer - 1] + playerSize[thirdPlayer - 1]) * merge2Size);
+					initiateDroplet("player" + firstPlayer,
+					                droplet.transform.position + disDifference,
+					                playerSize[firstPlayer - 1]);
+					Destroy(droplet);
 				}
 				if (Input.GetKey(thirdPlayerRight)){
 					//second player goes left alone
-					isMerge3 = false;
-					isMerge2 = true;
-					initialPlayer(secondPlayer, playerMerge3.transform.position - new Vector3(1f, 0, 0));
-					merged2Players[0] = firstPlayer;
-					merged2Players[1] = thirdPlayer;
-					initialMerge2(playerMerge3.transform.position + new Vector3(1f, 0, 0));
-					Destroy(playerMerge3);
+					initiateDroplet("player" + secondPlayer,
+					                droplet.transform.position - disDifference,
+					                playerSize[secondPlayer - 1]);
+					initiateDroplet("player" + firstPlayer + thirdPlayer,
+					                droplet.transform.position + disDifference,
+					                (playerSize[firstPlayer - 1] + playerSize[thirdPlayer - 1]) * merge2Size);
+					Destroy(droplet);
 				}
+			}
+		}
+		
+		//control by controller
+		if (isControllerConnected) {
+			float firstPlayerMove = playerMove(firstPlayer);
+			float secondPlayerMove = playerMove(secondPlayer);
+			float thirdPlayerMove = playerMove(thirdPlayer);
+
+			if ((firstPlayerMove <= 0 && secondPlayerMove <= 0 && thirdPlayerMove <= 0)
+				||(firstPlayerMove >= 0 && secondPlayerMove >= 0 && thirdPlayerMove >= 0)){
+				//move together
+				float aveMove = (firstPlayerMove + secondPlayerMove + thirdPlayerMove) / 3;
+				droplet.transform.position += new Vector3(aveMove * playerMoveSpeed, 0, 0);
+			} else {
+				//split up
+				initiateDroplet("player" + firstPlayer,
+				                droplet.transform.position + new Vector3((firstPlayerMove > 0 ? 1f : -1f), 0, 0),
+				                playerSize[firstPlayer - 1]);
+				initiateDroplet("player" + secondPlayer,
+				                droplet.transform.position + new Vector3((secondPlayerMove > 0 ? 1f : -1f), 0, 0),
+				                playerSize[secondPlayer - 1]);
+				initiateDroplet("player" + thirdPlayer,
+				                droplet.transform.position + new Vector3((thirdPlayer > 0 ? 1f : -1f), 0, 0),
+				                playerSize[thirdPlayer - 1]);
+				Destroy(droplet);
 			}
 		}
 	}
 
 	//control of 4 players
-	void manipulate4Players() {
+	void manipulate4Players(GameObject droplet) {
+		//control by keyboard
 		if (Input.GetKey(player1Left)){
 			if (Input.GetKey(player2Left)){
 				if (Input.GetKey(player3Left)){
 					if (Input.GetKey(player4Left)){
 						//Go left together
-						playerMerge4.transform.position -= speedVector;
+						droplet.transform.position -= speedVector;
 					}
 					if (Input.GetKey(player4Right)){
 						//player4 goes right alone
-						isMerge4 = false;
-						isMerge3 = true;
-						merged3Players = new int[3]{0, 1, 2};
-						initialMerge3(playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialPlayer(3, playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player123",
+						                droplet.transform.position - disDifference,
+						                (playerSize[0] + playerSize[1] + playerSize[2]) * merge3Size);
+						initiateDroplet("player4",
+						                droplet.transform.position + disDifference,
+						                playerSize[3]);
+						Destroy(droplet);
 					}
 				}
 				if (Input.GetKey(player3Right)){
 					if (Input.GetKey(player4Left)){
 						//player3 goes right alone
-						isMerge4 = false;
-						isMerge3 = true;
-						merged3Players = new int[3]{0, 1, 3};
-						initialMerge3(playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialPlayer(2, playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player124",
+						                droplet.transform.position - disDifference,
+						                (playerSize[0] + playerSize[1] + playerSize[3]) * merge3Size);
+						initiateDroplet("player3",
+						                droplet.transform.position + disDifference,
+						                playerSize[2]);
+						Destroy(droplet);
 					}
 					if (Input.GetKey(player4Right)){
 						//player12 goes left, player34 goes right
-						isMerge4 = false;
-						isMerge2 = true;
-						merged2Players = new int[4]{0,1,2,3};
-						initialMerge2(playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialMerge2(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player12",
+						                droplet.transform.position - disDifference,
+						                (playerSize[0] + playerSize[1]) * merge2Size);
+						initiateDroplet("player34",
+						                droplet.transform.position + disDifference,
+						                (playerSize[2] + playerSize[3]) * merge2Size);
+						Destroy(droplet);
 					}
 				}
 			}
@@ -454,41 +353,45 @@ public class dropletController : MonoBehaviour {
 				if (Input.GetKey(player3Left)){
 					if (Input.GetKey(player4Left)){
 						//player2 goes right alone
-						isMerge4 = false;
-						isMerge3 = true;
-						merged3Players = new int[3]{0, 2, 3};
-						initialMerge3(playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialPlayer(1, playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player134",
+						                droplet.transform.position - disDifference,
+						                (playerSize[0] + playerSize[2] + playerSize[3]) * merge3Size);
+						initiateDroplet("player2",
+						                droplet.transform.position + disDifference,
+						                playerSize[1]);
+						Destroy(droplet);
 					}
 					if (Input.GetKey(player4Right)){
 						//player13 goes left, player24 goes right
-						isMerge4 = false;
-						isMerge2 = true;
-						merged2Players = new int[4]{0,2,1,3};
-						initialMerge2(playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialMerge2(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player13",
+						                droplet.transform.position - disDifference,
+						                (playerSize[0] + playerSize[2]) * merge2Size);
+						initiateDroplet("player24",
+						                droplet.transform.position + disDifference,
+						                (playerSize[1] + playerSize[3]) * merge2Size);
+						Destroy(droplet);
 					}
 				}
 				if (Input.GetKey(player3Right)){
 					if (Input.GetKey(player4Left)){
 						//player14 goes left, player23 goes right
-						isMerge4 = false;
-						isMerge2 = true;
-						merged2Players = new int[4]{0,3,1,2};
-						initialMerge2(playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialMerge2(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player14",
+						                droplet.transform.position - disDifference,
+						                (playerSize[0] + playerSize[3]) * merge2Size);
+						initiateDroplet("player23",
+						                droplet.transform.position + disDifference,
+						                (playerSize[1] + playerSize[2]) * merge2Size);
+						Destroy(droplet);
 					}
 					if (Input.GetKey(player4Right)){
 						//player1 goes left alone
-						isMerge4 = false;
-						isMerge3 = true;
-						merged3Players = new int[3]{1, 2, 3};
-						initialPlayer(0, playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						initiateDroplet("player1",
+						                droplet.transform.position - disDifference,
+						                playerSize[0]);
+						initiateDroplet("player234",
+						                droplet.transform.position + disDifference,
+						                (playerSize[1] + playerSize[2] + playerSize[3]) * merge3Size);
+						Destroy(droplet);
 					}
 				}
 			}
@@ -498,212 +401,196 @@ public class dropletController : MonoBehaviour {
 				if (Input.GetKey(player3Right)){
 					if (Input.GetKey(player4Right)){
 						//Go right together
-						playerMerge4.transform.position += speedVector;
+						droplet.transform.position += speedVector;
 					}
 					if (Input.GetKey(player4Left)){
-						//player4 goes alone
-						isMerge4 = false;
-						isMerge3 = true;
-						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
-						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-						Destroy(playerMerge4);
+						//player4 goes left alone
+						initiateDroplet("player4",
+						                droplet.transform.position - disDifference,
+						                playerSize[3]);
+						initiateDroplet("player123",
+						                droplet.transform.position + disDifference,
+						                (playerSize[0] + playerSize[1] + playerSize[2]) * merge3Size);
+						Destroy(droplet);
 					}
 				}
-//				if (Input.GetKey(player3Left)){
-//					if (Input.GetKey(player4Right)){
-//						//Go right together
-//						playerMerge4.transform.position += speedVector;
-//					}
-//					if (Input.GetKey(player4Left)){
-//						//player4 goes alone
-//						isMerge4 = false;
-//						isMerge3 = true;
-//						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
-//						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-//						Destroy(playerMerge4);
-//					}
-//				}
+				if (Input.GetKey(player3Left)){
+					if (Input.GetKey(player4Right)){
+						//player3 goes left alone
+						initiateDroplet("player3",
+						                droplet.transform.position - disDifference,
+						                playerSize[2]);
+						initiateDroplet("player124",
+						                droplet.transform.position + disDifference,
+						                (playerSize[0] + playerSize[1] + playerSize[3]) * merge3Size);
+						Destroy(droplet);
+					}
+					if (Input.GetKey(player4Left)){
+						//player34 goes left, player12 goes right
+						initiateDroplet("player34",
+						                droplet.transform.position - disDifference,
+						                (playerSize[2] + playerSize[3]) * merge2Size);
+						initiateDroplet("player12",
+						                droplet.transform.position + disDifference,
+						                (playerSize[0] + playerSize[1]) * merge2Size);
+						Destroy(droplet);
+					}
+				}
 			}
-//			if (Input.GetKey(player2Right)){
-//				if (Input.GetKey(player3Right)){
-//					if (Input.GetKey(player4Right)){
-//						//Go right together
-//						playerMerge4.transform.position += speedVector;
-//					}
-//					if (Input.GetKey(player4Left)){
-//						//player4 goes alone
-//						isMerge4 = false;
-//						isMerge3 = true;
-//						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
-//						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-//						Destroy(playerMerge4);
-//					}
-//				}
-//				if (Input.GetKey(player3Left)){
-//					if (Input.GetKey(player4Right)){
-//						//Go right together
-//						playerMerge4.transform.position += speedVector;
-//					}
-//					if (Input.GetKey(player4Left)){
-//						//player4 goes alone
-//						isMerge4 = false;
-//						isMerge3 = true;
-//						initialPlayer(3, playerMerge4.transform.position - new Vector3(1f, 0, 0));
-//						initialMerge3(playerMerge4.transform.position + new Vector3(1f, 0, 0));
-//						Destroy(playerMerge4);
-//					}
-//				}
-//				
-//			}
+			if (Input.GetKey(player2Left)){
+				if (Input.GetKey(player3Right)){
+					if (Input.GetKey(player4Right)){
+						//player2 goes left alone
+						initiateDroplet("player2",
+						                droplet.transform.position - disDifference,
+						                playerSize[1]);
+						initiateDroplet("player134",
+						                droplet.transform.position + disDifference,
+						                (playerSize[0] + playerSize[2] + playerSize[3]) * merge3Size);
+						Destroy(droplet);
+					}
+					if (Input.GetKey(player4Left)){
+						//player24 goes left, player13 goes right
+						initiateDroplet("player24",
+						                droplet.transform.position - disDifference,
+						                (playerSize[1] + playerSize[3]) * merge2Size);
+						initiateDroplet("player13",
+						                droplet.transform.position + disDifference,
+						                (playerSize[0] + playerSize[2]) * merge2Size);
+						Destroy(droplet);
+					}
+				}
+				if (Input.GetKey(player3Left)){
+					if (Input.GetKey(player4Right)){
+						//player23 goes left, player14 goes right
+						initiateDroplet("player23",
+						                droplet.transform.position - disDifference,
+						                (playerSize[1] + playerSize[2]) * merge2Size);
+						initiateDroplet("player14",
+						                droplet.transform.position + disDifference,
+						                (playerSize[0] + playerSize[3]) * merge2Size);
+						Destroy(droplet);
+					}
+					if (Input.GetKey(player4Left)){
+						//player1 goes right alone
+						initiateDroplet("player234",
+						                droplet.transform.position - disDifference,
+						                (playerSize[1] + playerSize[2] + playerSize[3]) * merge3Size);
+						initiateDroplet("player1",
+						                droplet.transform.position + disDifference,
+						                playerSize[0]);
+						Destroy(droplet);
+					}
+				}
+			}
+		}
+
+		//control by controller
+		if (isControllerConnected) {
+			if ((player1Move <= 0 && player2Move <= 0 && player3Move <= 0 && player4Move <= 0)
+			    ||(player1Move >= 0 && player2Move >= 0 && player3Move >= 0 && player4Move >= 0)){
+				//move together
+				float aveMove = (player1Move + player2Move + player3Move + player4Move) / 4;
+				droplet.transform.position += new Vector3(aveMove * playerMoveSpeed, 0, 0);
+			} else {
+				//split up
+				initiateDroplet("player1",
+				                droplet.transform.position + new Vector3((player1Move > 0 ? 1f : -1f), 0, 0),
+				                playerSize[0]);
+				initiateDroplet("player2",
+				                droplet.transform.position + new Vector3((player2Move > 0 ? 1f : -1f), 0, 0),
+				                playerSize[1]);
+				initiateDroplet("player3",
+				                droplet.transform.position + new Vector3((player3Move > 0 ? 1f : -1f), 0, 0),
+				                playerSize[2]);
+				initiateDroplet("player4",
+				                droplet.transform.position + new Vector3((player4Move > 0 ? 1f : -1f), 0, 0),
+				                playerSize[3]);
+				Destroy(droplet);
+			}
 		}
 	}
 	
 	// Use this for initialization
 	void Start () {
-		player = new GameObject[4];
-		initialPlayer (0, player1Pos);
-		initialPlayer (1, player2Pos);
-		initialPlayer (2, player3Pos);
-		initialPlayer (3, player4Pos);
-		playerMerge2 = new GameObject[2];
-		playerMerge2 [0] = null;
-		playerMerge2 [1] = null;
-		merged2Players = new int[4];
-		merged3Players = new int[3];
-//		inputController = gameObject.GetComponent("XInputTestCS") as XInputTestCS;
-//		if (inputController != null) {
-//			isControllerConnected = true;
-//		}
+		playerSize = new Vector3[4] {initialPlayerSize, initialPlayerSize, initialPlayerSize, initialPlayerSize};
+		initiateDroplet ("player1", player1Pos, playerSize[0]);
+		initiateDroplet ("player2", player2Pos, playerSize[1]);
+		initiateDroplet ("player3", player3Pos, playerSize[2]);
+		initiateDroplet ("player4", player4Pos, playerSize[3]);
+
+		switch (Input.GetJoystickNames().Length) {
+		case 0:
+			Debug.Log("Please plug in your controllers");
+			break;
+		case 1:
+			Debug.Log("Please plug in 2 controllers");
+			break;
+		case 2:
+			isControllerConnected = true;
+			break;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//Rocognize which droplet is merged with other droplet
-		if (player[0] == null) {
-			if(player[1] == null && player[2] != null && player[3] != null){
-				//player1, player2 merge
-				Debug.Log("1&2");
-				merged2Players[0] = 0;
-				merged2Players[1] = 1;
-				setIsMerge2(true);
-				manipulate2Players(0, 0, 1); 
-				manipulatePlayer3();
-				manipulatePlayer4();
-			} else if (player[1] != null && player[2] == null && player[3] != null){
-				//player1, player3 merge
-				merged2Players[0] = 0;
-				merged2Players[1] = 2;
-				setIsMerge2(true);
-				manipulate2Players(0, 0, 2); 
-				manipulatePlayer2();
-				manipulatePlayer4();
-			} else if (player[1] != null && player[2] != null && player[3] == null){
-				//player1, player4 merge
-				merged2Players[0] = 0;
-				merged2Players[1] = 3;
-				setIsMerge2(true);
-				manipulate2Players(0, 0, 3); 
-				manipulatePlayer2();
-				manipulatePlayer3();
-			} else if (player[1] == null && player[2] == null && player[3] != null){
-				//player1, player2, player3 merge
-				merged3Players = new int[3]{0, 1, 2};
-				setIsMerge3(true);
-				manipulate3Players(0, 1, 2);
-				manipulatePlayer4();
-			} else if (player[1] == null && player[2] != null && player[3] == null){
-				//player1, player2, player4 merge
-				merged3Players = new int[3]{0, 1, 3};
-				setIsMerge3(true);
-				manipulate3Players(0, 1, 3);
-				manipulatePlayer3();
-			} else if (player[1] != null && player[2] == null && player[3] == null){
-				//player1, player3, player4 merge
-				merged3Players = new int[3]{0, 2, 3};
-				setIsMerge3(true);
-				manipulate3Players(0, 2, 3);
-				manipulatePlayer2();
-			} else if (player[1] == null && player[2] == null && player[3] == null){
-				//2 players merge and 2 other players merge
-				if (playerMerge2[0] != null && playerMerge2[1] == null) {
-					for (int i = 0; i <= 3; i++){
-						if (merged2Players[0] != i && merged2Players[1] != i){
-							merged2Players[2] = i;
-							break;
-						}
-					}
-					for (int i = 0; i <= 3; i++){
-						if (merged2Players[0] != i && merged2Players[1] != i && merged2Players[2] != i){
-							merged2Players[3] = i;
-							break;
-						}
-					}
-					setIsMerge2(true);
-				} else if(playerMerge2[0] != null && playerMerge2[1] != null){
-					manipulate2Players(0, merged2Players[0], merged2Players[1]);
-					manipulate2Players(1, merged2Players[2], merged2Players[3]);
-				} else {
-					//player1, player2, player3, player4 merge
-					setIsMerge4(true);
-					manipulate4Players();
-				}
-			}
-		}else if (player[1] == null) {
-			if(player[2] == null && player[3] != null){
-				//player2, player3 merge
-				merged2Players[0] = 1;
-				merged2Players[1] = 2;
-				setIsMerge2(true);
-				manipulate2Players(0, 1, 2); 
-				manipulatePlayer1();
-				manipulatePlayer4();
-			} else if (player[2] != null && player[3] == null){
-				//player2, player4 merge
-				merged2Players[0] = 1;
-				merged2Players[1] = 3;
-				setIsMerge2(true);
-				manipulate2Players(0, 1, 3); 
-				manipulatePlayer1();
-				manipulatePlayer3();
-			} else if (player[2] == null && player[3] == null){
-				//player2, player3, player4 merge
-				merged3Players = new int[3]{1, 2, 3};
-				setIsMerge3(true);
-				manipulate3Players(1, 2, 3);
-				manipulatePlayer1();
-			}
-		} else if (player[2] == null){
-			//player3, player4 merge
-			merged2Players[0] = 2;
-			merged2Players[1] = 3;
-			setIsMerge2(true);
-			manipulate2Players(0, 2, 3); 
-			manipulatePlayer1();
-			manipulatePlayer2();
-		} else {
-			//no droplet merges
-			manipulatePlayer1();
-			manipulatePlayer2();
-			manipulatePlayer3();
-			manipulatePlayer4();
+		//update the controller state
+		if (isControllerConnected){
+			player1Move = GamePad.GetState(GamePad.Index.One).LeftStickAxis.x;
+			player2Move = GamePad.GetState(GamePad.Index.One).rightStickAxis.x;
+			player3Move = GamePad.GetState(GamePad.Index.Two).LeftStickAxis.x;
+			player4Move = GamePad.GetState(GamePad.Index.Two).rightStickAxis.x;
 		}
-		
-		//initial the merged droplet
-		if (isMerge2) {
-			if (isCollide){
-				initialMerge2(collidePos);
-				isCollide = false;
-			}
-		} else if (isMerge3) {
-			if (isCollide){
-				initialMerge3(collidePos);
-				isCollide = false;
-			}
-		} else if (isMerge4) {
-			if (isCollide){
-				initialMerge4(collidePos);
-				isCollide = false;
-			}
+
+		//manipulate droplets
+		if (GameObject.Find ("player1") != null){
+			Debug.Log("1");
+			manipulate1Player(GameObject.Find ("player1"), 1);
+		}
+		if (GameObject.Find ("player2") != null){
+			Debug.Log("2");
+			manipulate1Player(GameObject.Find ("player2"), 2);
+		}
+		if (GameObject.Find ("player3") != null){
+			Debug.Log("3");
+			manipulate1Player(GameObject.Find ("player3"), 3);
+		}
+		if (GameObject.Find ("player4") != null){
+			Debug.Log("4");
+			manipulate1Player(GameObject.Find ("player4"), 4);
+		}
+		if (GameObject.Find ("player12") != null){
+			manipulate2Players(GameObject.Find ("player12"), 1, 2);
+		}
+		if (GameObject.Find ("player13") != null){
+			manipulate2Players(GameObject.Find ("player13"), 1, 3);
+		}
+		if (GameObject.Find ("player14") != null){
+			manipulate2Players(GameObject.Find ("player14"), 1, 4);
+		}
+		if (GameObject.Find ("player23") != null){
+			manipulate2Players(GameObject.Find ("player23"), 2, 3);
+		}
+		if (GameObject.Find ("player24") != null){
+			manipulate2Players(GameObject.Find ("player24"), 2, 4);
+		}
+		if (GameObject.Find ("player34") != null){
+			manipulate2Players(GameObject.Find ("player34"), 3, 4);
+		}
+		if (GameObject.Find ("player123") != null){
+			manipulate3Players(GameObject.Find ("player123"), 1, 2, 3);
+		}
+		if (GameObject.Find ("player124") != null){
+			manipulate3Players(GameObject.Find ("player124"), 1, 2, 4);
+		}
+		if (GameObject.Find ("player134") != null){
+			manipulate3Players(GameObject.Find ("player134"), 1, 3, 4);
+		}
+		if (GameObject.Find ("player234") != null){
+			manipulate3Players(GameObject.Find ("player234"), 2, 3, 4);
+		}
+		if (GameObject.Find ("player1234") != null){
+			manipulate4Players(GameObject.Find ("player1234"));
 		}
 	}
 }

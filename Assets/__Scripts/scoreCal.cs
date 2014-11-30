@@ -41,9 +41,9 @@ public class scoreCal : MonoBehaviour {
 	}
 
 	void OnGUI(){
-//		GUILayout.Label ("player1: " + player1);
-//		GUILayout.Label ("player2: " + player2);
-//		GUILayout.Label ("player3: " + player3);
-//		GUILayout.Label ("player4: " + player4);
+		GUILayout.Label ("player1: " + player1);
+		GUILayout.Label ("player2: " + player2);
+		GUILayout.Label ("player3: " + player3);
+		GUILayout.Label ("player4: " + player4);
 	}
 }

@@ -48,9 +48,6 @@
   <ItemGroup>
      <Compile Include="Assets\Editor\SortingLayersEditor.cs" />
      <None Include="Assets\iTween\ReadMe!\ReadMe!.txt" />
- <Reference Include="XInputDotNetPure">
- <HintPath>Assets\Plugins\x86\XInputDotNetPure.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>

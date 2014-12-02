@@ -1,12 +1,15 @@
 fileFormatVersion: 2
-guid: 59ab055d2d5e5481da6fb3980480dff3
+guid: 9a7dbe4276ef846f3ad6ef2dcdf3e963
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Tree_0
+    21300000: P1
+    21300002: P2
+    21300004: P3
+    21300006: P4
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -26,7 +29,7 @@ TextureImporter:
   maxTextureSize: 1024
   textureSettings:
     filterMode: -1
-    aniso: 1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -37,20 +40,50 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 2763, y: 0, z: 59, w: 1158}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: Tree_0
+    - name: P1
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 3264
-        height: 2448
+        width: 205
+        height: 208
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: P2
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 0
+        width: 234
+        height: 208
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: P3
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 0
+        width: 230
+        height: 208
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: P4
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 0
+        width: 237
+        height: 208
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

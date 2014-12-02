@@ -53,6 +53,7 @@
      <Compile Include="Assets\__Scripts\dropletController.cs" />
      <Compile Include="Assets\__Scripts\merge2d.cs" />
      <Compile Include="Assets\__Scripts\scoreCal.cs" />
+     <Compile Include="Assets\__Scripts\swingSync.cs" />
      <Compile Include="Assets\iTween\Plugins\iTween.cs" />
      <Compile Include="Assets\iTween\Sample\MoveSample.cs" />
      <Compile Include="Assets\iTween\Sample\RotateSample.cs" />

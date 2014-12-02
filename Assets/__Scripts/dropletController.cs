@@ -544,19 +544,19 @@ public class dropletController : MonoBehaviour {
 
 		//manipulate droplets
 		if (GameObject.Find ("player1") != null){
-			Debug.Log("1");
+//			Debug.Log("1");
 			manipulate1Player(GameObject.Find ("player1"), 1);
 		}
 		if (GameObject.Find ("player2") != null){
-			Debug.Log("2");
+//			Debug.Log("2");
 			manipulate1Player(GameObject.Find ("player2"), 2);
 		}
 		if (GameObject.Find ("player3") != null){
-			Debug.Log("3");
+//			Debug.Log("3");
 			manipulate1Player(GameObject.Find ("player3"), 3);
 		}
 		if (GameObject.Find ("player4") != null){
-			Debug.Log("4");
+//			Debug.Log("4");
 			manipulate1Player(GameObject.Find ("player4"), 4);
 		}
 		if (GameObject.Find ("player12") != null){

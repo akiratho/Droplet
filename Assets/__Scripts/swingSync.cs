@@ -82,13 +82,21 @@ public class swingSync : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		GUILayout.Label("Player1: " + player1Move);
-		GUILayout.Label("Player2: " + player2Move);
-		GUILayout.Label("Player3: " + player3Move);
-		GUILayout.Label("Player4: " + player4Move);
-		GUILayout.Label(playerState[player1State], GUILayout.Width(100));
-		GUILayout.Label(playerState[player2State], GUILayout.Width(100));
-		GUILayout.Label(playerState[player3State], GUILayout.Width(100));
-		GUILayout.Label(playerState[player4State], GUILayout.Width(100));
+//		GUILayout.Label("Player1: " + player1Move);
+//		GUILayout.Label("Player2: " + player2Move);
+//		GUILayout.Label("Player3: " + player3Move);
+//		GUILayout.Label("Player4: " + player4Move);
+//		GUILayout.Label(playerState[player1State], GUILayout.Width(100));
+//		GUILayout.Label(playerState[player2State], GUILayout.Width(100));
+//		GUILayout.Label(playerState[player3State], GUILayout.Width(100));
+//		GUILayout.Label(playerState[player4State], GUILayout.Width(100));
+		GUI.Label(new Rect(10, 10, 100, 20), "Player1: " + player1Move);
+		GUI.Label(new Rect(Screen.width/4 + 10, 10, 100, 20), "Player2: " + player2Move);
+		GUI.Label(new Rect(Screen.width/2 + 10, 10, 100, 20), "Player3: " + player3Move);
+		GUI.Label(new Rect(Screen.width - 150, 10, 100, 20), "Player4: " + player4Move);
+		GUI.DrawTexture(new Rect(10, 50, 100, 50), playerState[player1State], ScaleMode.ScaleToFit, true, 0f);
+		GUI.DrawTexture(new Rect(Screen.width/4 + 10, 50, 100, 50), playerState[player2State], ScaleMode.ScaleToFit, true, 0f);
+		GUI.DrawTexture(new Rect(Screen.width/2 + 10, 50, 100, 50), playerState[player3State], ScaleMode.ScaleToFit, true, 0f);
+		GUI.DrawTexture(new Rect(Screen.width - 150, 50, 100, 50), playerState[player4State], ScaleMode.ScaleToFit, true, 0f);
 	}
 }

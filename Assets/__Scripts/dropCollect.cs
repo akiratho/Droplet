@@ -12,6 +12,8 @@ public class dropCollect : MonoBehaviour {
 	public float gravityRangeMin = 0.05f;
 	public float gravityRangeMax = 0.3f;
 	public float timeInterval = 0.3f;
+	
+	public bool levelFinished = false;
 
 	// Use this for initialization
 	IEnumerator Start () {
@@ -22,6 +24,7 @@ public class dropCollect : MonoBehaviour {
 			Vector3 pos = new Vector3(posX, posY, 0f);
 			drops[i] = Instantiate(drop, pos, Quaternion.identity) as GameObject;
 			drops[i].rigidbody2D.gravityScale = Random.Range(gravityRangeMin, gravityRangeMax);
+			drops[i].name = "dewDrop";
 			yield return new WaitForSeconds(timeInterval);
 		}
 
@@ -29,6 +32,9 @@ public class dropCollect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (GameObject.Find("dewDrop") == null) {
+			GameObject.Find("Clouds BG").collider2D.enabled = false;
+			levelFinished = true;
+		}
 	}
 }

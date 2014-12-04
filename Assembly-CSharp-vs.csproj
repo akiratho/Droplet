@@ -49,22 +49,18 @@
      <Compile Include="Assets\GamePadInput\Demo\DemoScript.cs" />
      <Compile Include="Assets\GamePadInput\GamePad.cs" />
      <Compile Include="Assets\__Scripts\BabyBird.cs" />
+     <Compile Include="Assets\__Scripts\cameraMove.cs" />
      <Compile Include="Assets\__Scripts\dropCollect.cs" />
      <Compile Include="Assets\__Scripts\dropletController.cs" />
      <Compile Include="Assets\__Scripts\merge2d.cs" />
      <Compile Include="Assets\__Scripts\scoreCal.cs" />
      <Compile Include="Assets\__Scripts\swingSync.cs" />
+     <Compile Include="Assets\__Scripts\title\titleMenu.cs" />
      <Compile Include="Assets\iTween\Plugins\iTween.cs" />
      <Compile Include="Assets\iTween\Sample\MoveSample.cs" />
      <Compile Include="Assets\iTween\Sample\RotateSample.cs" />
      <Compile Include="Assets\iTween\Sample\SampleInfo.cs" />
      <None Include="Assets\iTween\ReadMe!\ReadMe!.txt" />
-<<<<<<< Updated upstream
-=======
- <Reference Include="UnityEngine.UI">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
- </Reference>
->>>>>>> Stashed changes
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

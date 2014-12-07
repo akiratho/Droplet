@@ -1,12 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\cameraMove.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\__Scripts\dropCollect.cs">
     <Files>
-      <File FileName="Assets\__Scripts\swingSync.cs" Line="1" Column="1" />
       <File FileName="Assets\__Scripts\dropCollect.cs" Line="37" Column="25" />
-      <File FileName="Assets\__Scripts\cameraMove.cs" Line="30" Column="3" />
-      <File FileName="Assets\__Scripts\scoreCal.cs" Line="37" Column="24" />
-      <File FileName="Assets\__Scripts\merge2d.cs" Line="123" Column="93" />
+      <File FileName="Assets\__Scripts\title\titleMenu.cs" Line="30" Column="5" />
+      <File FileName="Assets\__Scripts\swingSync.cs" Line="1" Column="1" />
+      <File FileName="Assets\__Scripts\scoreCal.cs" Line="1" Column="1" />
+      <File FileName="Assets\__Scripts\merge2d.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

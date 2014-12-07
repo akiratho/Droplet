@@ -49,10 +49,12 @@
      <Compile Include="Assets\GamePadInput\Demo\DemoScript.cs" />
      <Compile Include="Assets\GamePadInput\GamePad.cs" />
      <Compile Include="Assets\__Scripts\BabyBird.cs" />
-     <Compile Include="Assets\__Scripts\cameraMove.cs" />
+     <Compile Include="Assets\__Scripts\Spring\swingTrigger.cs" />
      <Compile Include="Assets\__Scripts\dropCollect.cs" />
      <Compile Include="Assets\__Scripts\dropletController.cs" />
      <Compile Include="Assets\__Scripts\merge2d.cs" />
+     <Compile Include="Assets\__Scripts\nextLevel.cs" />
+     <Compile Include="Assets\__Scripts\prologue\cameraMove.cs" />
      <Compile Include="Assets\__Scripts\scoreCal.cs" />
      <Compile Include="Assets\__Scripts\swingSync.cs" />
      <Compile Include="Assets\__Scripts\title\titleMenu.cs" />
